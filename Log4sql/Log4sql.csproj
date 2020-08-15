@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+	<PropertyGroup>
+		<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+		<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+		<ProjectGuid>{9948D16A-D967-4D12-9086-F83EB9C6C083}</ProjectGuid>
+		<OutputType>Library</OutputType>
+		<AppDesignerFolder>Properties</AppDesignerFolder>
+		<RootNamespace>Log4sql</RootNamespace>
+		<AssemblyName>Log4sql</AssemblyName>
+		<TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+		<FileAlignment>512</FileAlignment>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+		<PlatformTarget>AnyCPU</PlatformTarget>
+		<DebugSymbols>true</DebugSymbols>
+		<DebugType>full</DebugType>
+		<Optimize>false</Optimize>
+		<OutputPath>bin\Debug\</OutputPath>
+		<DefineConstants>DEBUG;TRACE</DefineConstants>
+		<ErrorReport>prompt</ErrorReport>
+		<WarningLevel>4</WarningLevel>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+		<PlatformTarget>AnyCPU</PlatformTarget>
+		<DebugType>pdbonly</DebugType>
+		<Optimize>true</Optimize>
+		<OutputPath>bin\Release\</OutputPath>
+		<DefineConstants>TRACE</DefineConstants>
+		<ErrorReport>prompt</ErrorReport>
+		<WarningLevel>4</WarningLevel>
+	</PropertyGroup>
+	<ItemGroup>
+		<Reference Include="System" />
+		<Reference Include="System.Core" />
+		<Reference Include="System.Data" />
+		<Reference Include="System.Xml" />
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Include="Appenders\IAppender.cs" />
+		<Compile Include="Appenders\Impl\MsSqlAppender.cs" />
+		<Compile Include="Appenders\Impl\MsSqlConsoleAppender.cs" />
+		<Compile Include="ExceptionUtils.cs" />
+		<Compile Include="Logger.cs" />
+		<Compile Include="Logger.gen.cs">
+		  <AutoGen>True</AutoGen>
+		  <DesignTime>True</DesignTime>
+		  <DependentUpon>Logger.tt</DependentUpon>
+		</Compile>
+		<Compile Include="LogLevel.cs" />
+		<Compile Include="Properties\AssemblyInfo.cs" />
+	</ItemGroup>
+	<ItemGroup>
+	  <PackageReference Include="JetBrains.Annotations" Version="2020.2.0-eap" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Content Include="Logger.tt">
+	    <Generator>TextTemplatingFileGenerator</Generator>
+	    <LastGenOutput>Logger.gen.cs</LastGenOutput>
+	  </Content>
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="Log4sql.csproj">
+	    <Project>{9948d16a-d967-4d12-9086-f83eb9c6c083}</Project>
+	    <Name>Log4sql</Name>
+	  </ProjectReference>
+	</ItemGroup>
+	<Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+	<!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+		 Other similar extension points exist, see Microsoft.Common.targets.
+	<Target Name="BeforeBuild">
+	</Target>
+	<Target Name="AfterBuild">
+	</Target>
+	-->
+
+</Project>

@@ -1,0 +1,59 @@
+<#@ template language="C#" #>
+<#@ output encoding="utf-8" extension=".gen.cs" #>
+using System.Collections.Generic;
+using System.Data.SqlTypes;
+
+namespace Log4sql
+{
+    public partial class Logger
+    {
+<#
+	string[] levels = {"Debug", "Info", "Warn", "Error", "Fatal"};
+	const int maxArgsCount = 20;
+	
+	foreach (string level in levels)
+	for (int argCount = 1; argCount <= maxArgsCount; ++argCount)
+	{
+#>
+
+	    void <#=level#><#=argCount #>(SqlString template
+<#
+	for (int argNumber = 1; argNumber <= argCount; ++argNumber)
+	    {
+#>        , SqlString key<#=argNumber#>, SqlString value<#=argNumber#>
+<#
+	    }
+#>    )
+        {
+            if (MinLogLevel > LogLevel.<#=level#>) return;
+<#
+	for (int argNumber = 1; argNumber <= argCount; ++argNumber)
+	{
+		#>ExceptionUtil.CheckStringArg(key<#=argNumber#>, nameof(key<#=argNumber#>));<#
+	}
+#>
+
+            var parameters = new Dictionary<string, string>
+		    {
+<#
+	for (int argNumber = 1; argNumber <= argCount; ++argNumber)
+	{
+		if (argNumber > 1)
+		{
+			#>,<#
+		}#>
+        {key<#=argNumber#>.Value, value<#=argNumber#>.Value}<#
+	}
+#>
+            };
+
+		    foreach (var appender in _appenders)
+		    {
+		    	appender.Write(LoggerNamespace, LogLevel.<#=level#>, template.Value, parameters);
+            }
+        } <# // End of method #>
+<#
+	} // End of FOR loop
+#>
+    }<# // End of class #>
+}<# // End of namespace #>
